@@ -1,0 +1,17 @@
+library(jsonlite)
+library(tidyverse)
+library(plyr)
+library(dplyr)
+
+json_data <- fromJSON("#Response File Path")
+
+dataFrame <- json_data$rows %>%
+  select(-itemId) %>%
+  unnest() %>%
+  group_by(value) %>%
+  mutate(n = 1:n()) %>%
+  spread(n, data) %>%
+  ungroup()
+
+
+write.csv(dataFrame,file='Response.csv')
